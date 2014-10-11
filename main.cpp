@@ -1,0 +1,134 @@
+/*
+------------------------------------------------------------------------------------------------------------------------
+AUCKLAND UNIVERSITY OF TECHNOLOGY
+
+CODE DEVELOPED BY: ALESSANDRO CAETANO BELTRÃO
+STUDENT ID: 14851449
+SEMESTER 02 OF  2014
+PAPER: OPERATING SYSTEMS
+CODE LICENSED UNDER GNU GPL 2.0
+CAN BE ALSO FOUND IN: https://github.com/AlessandroCaetano/OS-Assignment
+
+FEEL FREE TO FORK AND PULL THIS PROJECT FROM MY REPOSITORY AND SEND ANY CONTRIBUTION THAT YOU WANT
+
+------------------------------------------------------------------------------------------------------------------------
+*/
+
+//Importing default input/output library
+#include <iostream>
+//Necessary for using threads
+#include <thread>
+//Used for vector class
+#include <vector>
+//Used for time manipulation
+#include <chrono>
+
+//Including custom class
+#include "ErrorChecker.h"
+#include "Buffer.h"
+
+//using standard library
+using namespace std;
+
+//Initializing Custom Buffer Class
+Buffer buffer;
+
+//Initializing Custom Error checker Class
+ErrorChecker error;
+
+//Producer Method
+void
+*produce(){
+	//Initializing random seed
+	srand(time(NULL));
+
+	//Random time to Sleep
+	int timeToSleep = rand()%10 + 1;
+
+	//Random item being produced
+	int producedItem;
+
+	//Printing current thread id
+	cout << "Producer thread number: "<< this_thread::get_id() <<" starting to run..." << endl;
+	while(true){
+		producedItem = rand() + 1;
+		this_thread::sleep_for(chrono::seconds(timeToSleep));
+		if(buffer.Insert_Item(producedItem) == 0)
+			cout << "Producer thread number: "<< this_thread::get_id() <<" inserted item sucesfully"<< endl;
+
+		buffer.Show_Itens();
+
+
+	}
+}
+
+//Consumer method
+void
+*consume(){
+	//Initializing random seed
+	srand(time(NULL));
+
+	//Random time to Sleep
+	int timeToSleep = rand()%10 + 1;
+
+	//Random item being consumed
+	int consumedItem;
+
+	//Printing current thread id
+	cout << "Consumer thread number: "<< this_thread::get_id() <<" starting to run..." << endl;
+	while(true){
+		consumedItem = rand()%5;
+		this_thread::sleep_for(chrono::seconds(timeToSleep));
+		if(buffer.Remove_Item(&consumedItem) == 0)
+			cout << "Consumer thread number: "<< this_thread::get_id() <<" consumed item sucesfully"<< endl;
+
+		buffer.Show_Itens();
+
+	}
+}
+
+//Main method
+int
+main(int argc, char *argv[]){
+
+
+	//Creating vector for Producers
+	vector<thread> producerVector;
+
+	//Creating vector for Consumers
+	vector<thread> consumerVector;
+
+	//Getting number of arguments
+	int numberOfArguments = argc-1;
+
+	//Check argument numbers
+	error.Error_ArgumentNumberCheck(numberOfArguments);
+
+	//Parsing parameters from command line
+	int sleepTime 		  = atoi(argv[1]);
+	int numberOfProducers = atoi(argv[2]);
+	int numberOfConsumers = atoi(argv[3]);
+
+
+	//Custom warning Checks
+	error.Warning_HighValueOfSleepTime(sleepTime);
+	error.Warning_HighNumberOfProducerThreads(numberOfProducers);
+	error.Warning_HighNumberOfConsumerThreads(numberOfConsumers);
+
+
+	//Creating Producer Threads
+	for(int i = 0; i < numberOfProducers; i++)
+		producerVector.push_back(thread(produce));
+
+	//Creating Consumer Threads
+	for(int i = 0; i < numberOfConsumers; i++){
+		consumerVector.push_back(thread(consume));
+	}
+
+	//Waiting for consumers and producers threads to end and join
+	for(auto& consumerThread:consumerVector) consumerThread.join();
+	for(auto& producerThread:producerVector) producerThread.join();
+
+	//End of the program
+	return 0;
+}
