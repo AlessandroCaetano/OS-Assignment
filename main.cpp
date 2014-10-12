@@ -153,12 +153,11 @@ main(int argc, char *argv[]){
 	//Main thread sleeping
 	this_thread::sleep_for(chrono::seconds(sleepTime));
 
-	unique_lock<mutex> lck(locker);
 
 	//Waiting for consumers and producers threads to end and join
 	for(auto& consumerThread:consumerVector) consumerThread.join();
 	for(auto& producerThread:producerVector) producerThread.join();
-	lck.unlock();
+
 	//End of the program
 	return 0;
 }
