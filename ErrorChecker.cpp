@@ -31,7 +31,7 @@ ErrorChecker::ErrorChecker(){
 
 //Error checker destructor
 ErrorChecker::~ErrorChecker(){
-	cout<<"Error checker destroyed..."<<endl;
+	cout<<"Error checker destroyed sucessfully..."<<endl;
 }
 //Function to check the argument number, it must be 3;
 void

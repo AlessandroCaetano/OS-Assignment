@@ -22,10 +22,13 @@ FEEL FREE TO FORK AND PULL THIS PROJECT FROM MY REPOSITORY AND SEND ANY CONTRIBU
 #include <vector>
 //Used for time manipulation
 #include <chrono>
+//Used for mutex lock
+#include <mutex>
 
 //Including custom class
 #include "ErrorChecker.h"
 #include "Buffer.h"
+
 
 //using standard library
 using namespace std;
@@ -36,54 +39,77 @@ Buffer buffer;
 //Initializing Custom Error checker Class
 ErrorChecker error;
 
+//Initializing mutex lock
+mutex locker;
+
 //Producer Method
 void
 *produce(){
+	unique_lock<mutex> lck(locker);
 	//Initializing random seed
 	srand(time(NULL));
 
 	//Random time to Sleep
 	int timeToSleep = rand()%10 + 1;
 
-	//Random item being produced
+	//variable of random item
 	int producedItem;
-
 	//Printing current thread id
 	cout << "Producer thread number: "<< this_thread::get_id() <<" starting to run..." << endl;
+	lck.unlock();
+
 	while(true){
-		producedItem = rand() + 1;
+		//Sleep time to give other threads a chance to take the processor
 		this_thread::sleep_for(chrono::seconds(timeToSleep));
+		//Locking critical session
+		unique_lock<mutex> lck(locker);
+		//Producing random item
+		producedItem = (rand() + 1);
 		if(buffer.Insert_Item(producedItem) == 0)
 			cout << "Producer thread number: "<< this_thread::get_id() <<" inserted item sucesfully"<< endl;
 
+		//SHow updated buffer
 		buffer.Show_Itens();
-
-
+		//Unlock critical section
+		lck.unlock();
 	}
 }
 
 //Consumer method
 void
 *consume(){
+	//Creating unique lock
+	unique_lock<mutex> lck(locker);
 	//Initializing random seed
 	srand(time(NULL));
 
 	//Random time to Sleep
 	int timeToSleep = rand()%10 + 1;
 
-	//Random item being consumed
+	//Consumed item
 	int consumedItem;
-
 	//Printing current thread id
 	cout << "Consumer thread number: "<< this_thread::get_id() <<" starting to run..." << endl;
+	lck.unlock();
+
 	while(true){
-		consumedItem = rand()%5;
+		//Sleep time to give other threads a chance to take the processor
 		this_thread::sleep_for(chrono::seconds(timeToSleep));
+
+		//Locking critical consumer section
+		unique_lock<mutex> lck(locker);
+
+		//Consuming item from buffer
+		consumedItem = (rand()%5);
 		if(buffer.Remove_Item(&consumedItem) == 0)
 			cout << "Consumer thread number: "<< this_thread::get_id() <<" consumed item sucesfully"<< endl;
+		else
+			cout << "Could not remove item" << endl;
 
+		//SHow updated buffer
 		buffer.Show_Itens();
-
+		//Unlock critical section
+		lck.unlock();
 	}
 }
 
@@ -124,11 +150,15 @@ main(int argc, char *argv[]){
 	for(int i = 0; i < numberOfConsumers; i++){
 		consumerVector.push_back(thread(consume));
 	}
+	//Main thread sleeping
+	this_thread::sleep_for(chrono::seconds(sleepTime));
+
+	unique_lock<mutex> lck(locker);
 
 	//Waiting for consumers and producers threads to end and join
 	for(auto& consumerThread:consumerVector) consumerThread.join();
 	for(auto& producerThread:producerVector) producerThread.join();
-
+	lck.unlock();
 	//End of the program
 	return 0;
 }

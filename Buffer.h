@@ -24,18 +24,20 @@ FEEL FREE TO FORK AND PULL THIS PROJECT FROM MY REPOSITORY AND SEND ANY CONTRIBU
 //using standard library
 using namespace std;
 
-
+//CLass definition for buffer class
 class Buffer{
 
+//Public methods definitions for buffer class
 public:
 	Buffer();
 	~Buffer();
 	int Insert_Item(int item);
 	int Remove_Item(int* item);
-	int Get_Item(int item);
+	int Get_Buffer_Item(int item);
 	void Show_Itens();
 
 
+//Private attributes definitions for buffer class
 private:
 	static const int BUFFER_SIZE = 5 ;
 	static const int size = BUFFER_SIZE;

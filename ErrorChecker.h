@@ -24,9 +24,10 @@ FEEL FREE TO FORK AND PULL THIS PROJECT FROM MY REPOSITORY AND SEND ANY CONTRIBU
 //using standard library
 using namespace std;
 
-
+//Class definition of ErrorCHecker
 class ErrorChecker{
 
+//Public methods for errror checker class
 public:
 	ErrorChecker();
 	~ErrorChecker();

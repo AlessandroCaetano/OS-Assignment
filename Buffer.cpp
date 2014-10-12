@@ -31,14 +31,14 @@ Buffer::Buffer(){
 
 //Destructor Method;
 Buffer::~Buffer(){
-	cout << "Buffer destroyed --- Run to the Hills" <<endl;
+	cout << "Buffer destroyed sucessfully..." <<endl;
 }
 
 //Method for item insertion
 int
 Buffer::Insert_Item(int item){
 	for(int i = 0; i < this->size; i++){
-			if(this->buffer_itens[i] != 0)
+			if(this->buffer_itens[i]!= 0)
 				continue;
 			else{
 				this->buffer_itens[i] = item;
@@ -66,7 +66,7 @@ Buffer::Remove_Item(int *item){
 
 //Method for Recovering Itens
 int
-Buffer::Get_Item(int item){
+Buffer::Get_Buffer_Item(int item){
 	for(int i = 0; i < this->size; i++){
 		if(item == this->buffer_itens[i]){
 			return item;
@@ -82,6 +82,6 @@ Buffer::Get_Item(int item){
 void
 Buffer::Show_Itens(){
 	for(int i = 0; i < this->size; i++)
-		cout<<"Buffer item on position "<< i+1 <<":  "<< buffer_itens[i] << endl;
+		cout<<"Buffer item on position "<< i+1 <<":  "<< buffer_itens[i]<< endl;
 }
 

@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-g -c -w -Wall -ansi -pedantic -I. -pthread -lm -std=c++11
+CFLAGS=-g -O2 -c -w -Wall -ansi -pedantic -I. -pthread -lm -std=c++11
 LDFLAGS=  -w -Wall -ansi -pedantic -I. -pthread -lm -std=c++11
 SOURCES=main.cpp Buffer.cpp ErrorChecker.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
