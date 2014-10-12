@@ -6,7 +6,7 @@ Operating Systems Assignment for Auckland Univesity of Technology
 Student Name: Alessandro CAetano Beltrao
 Student ID: 14851449
 Public Repository with the code: https://github.com/AlessandroCaetano/OS-Assignment
-Link to download the project: https://github.com/AlessandroCaetano/OS-Assignment
+Link to download the project: https://github.com/AlessandroCaetano/OS-Assignment/archive/master.zip
 
 
 1- How to Run
