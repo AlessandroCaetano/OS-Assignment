@@ -131,9 +131,9 @@ main(int argc, char *argv[]){
 	error.Error_ArgumentNumberCheck(numberOfArguments);
 
 	//Parsing parameters from command line
-	int sleepTime 		  = atoi(argv[1]);
-	int numberOfProducers = atoi(argv[2]);
-	int numberOfConsumers = atoi(argv[3]);
+	int sleepTime 		= atoi(argv[1]);
+	int numberOfProducers 	= atoi(argv[2]);
+	int numberOfConsumers 	= atoi(argv[3]);
 
 
 	//Custom warning Checks
